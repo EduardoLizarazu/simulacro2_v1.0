@@ -8,13 +8,22 @@ namespace simulacro2_v1._0.Controllers
     public class DictionariesController : Controller
     {
         private static List <Dictionary> _dictionaries = new();
-
+        
         [HttpGet]
         public IEnumerable<Dictionary> DevolverArreglo()
         {
             return _dictionaries;
         }
 
+        [HttpPost]
+        [Route("addManyItems")]
+        public void InsertarElemento(List<Dictionary> dictionary)
+        {
+            foreach(var item in dictionary)
+            {
+                InsertarElemento(item);
+            }
+        }
         [HttpPost]
         public IActionResult InsertarElemento(Dictionary dictionary)
         {
@@ -24,8 +33,8 @@ namespace simulacro2_v1._0.Controllers
            }
            _dictionaries.Add(dictionary);
             return Ok();
-
         }
+
         [HttpGet]
         [Route("search")]
         public Dictionary BuscarElemento(string key)
@@ -47,6 +56,13 @@ namespace simulacro2_v1._0.Controllers
                 counter += dic.Value;
             }
             return new Dictionary { Key = "La suma de todos los Values", Value = counter };
+        }
+        [HttpGet]
+        [Route("randomItem")]
+        public Dictionary RandomElemento()
+        {
+            var randomNumber = new Random().Next(0, _dictionaries.Count);
+            return _dictionaries[randomNumber];
         }
 
 
